@@ -1,4 +1,5 @@
 import json
+import sys
 from urllib.request import urlopen
 
 from bs4 import BeautifulSoup
@@ -20,3 +21,8 @@ def get_body_content(body):
 def save_data(file_name, data):
     with open("../data/" + file_name + ".json", 'w') as fp:
         json.dump(data, fp, indent=True)
+
+
+def progress(i):
+    sys.stdout.write("\r%d%%" % i)
+    sys.stdout.flush()
