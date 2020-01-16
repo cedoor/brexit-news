@@ -11,7 +11,9 @@ def scrape_page(url):
 
 def save_data(file_name, data):
     with open("../data/" + file_name + ".json", 'w') as fp:
-        json.dump(data, fp, indent=True)
+        for entry in data:
+            json.dump(entry, fp)
+            fp.write('\n')
     print("\n\n✔ %d articles saved in data/%s.json file!" % (len(data), file_name))
 
 
