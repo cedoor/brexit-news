@@ -1,30 +1,43 @@
+from os import environ
+
+import requests
+
 import src.utils as utils
 
 
 def start():
-    page = utils.get_page("https://www.theguardian.com/politics/eu-referendum/all")
+    api_endpoint = "http://content.guardianapis.com/search"
+    api_key = environ["GUARDIAN_API_KEY"]
 
-    articles = []
+    all_data = []
+    page_number = 1
 
-    article_anchors = page.select("section .fc-item__container > a")
+    while True:
+        # Get the request response passing all API parameters.
+        response = requests.get(api_endpoint, {
+            "tag": "politics/eu-referendum",
+            "section": "politics",
+            "order-by": "newest",
+            "show-fields": "trailText,bodyText,wordcount,publication",
+            "page-size": 200,
+            "page": page_number,
+            "api-key": api_key
+        }).json()["response"]
 
-    number_of_articles = len(article_anchors)
+        # Map from request response to standard data JSON structure.
+        all_data = all_data + list(map(lambda d: {
+            "title": d["webTitle"],
+            "url": d["webUrl"],
+            "date": d["webPublicationDate"],
+            "content": d["fields"]["bodyText"]
+        }, response["results"]))
 
-    print("")
+        if page_number == response["pages"]:
+            break
 
-    for i, article_anchor in enumerate(article_anchors):
-        page = utils.get_page(article_anchor.get('href'))
+        page_number += 1
 
-        article_body = page.select_one("article .content__article-body")
+        utils.progress(page_number / response["pages"] * 100)
 
-        if article_body is not None:
-            articles.append({
-                "title": page.select_one("article .content__header .content__headline").string,
-                "content": utils.get_body_content(article_body)
-            })
-
-        utils.progress((i + 1) / number_of_articles * 100)
-
-    utils.save_data("guardian", articles)
-
-    print("\n\nData saved in data/guardian.json file!")
+    # Save all data in a file.
+    utils.save_data("guardian", all_data)
