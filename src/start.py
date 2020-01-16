@@ -2,6 +2,8 @@ import src.guardian as guardian
 
 
 def start(newspaper):
+    print()
+
     return {
         "0": guardian.start
     }[newspaper]()
