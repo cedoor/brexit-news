@@ -40,4 +40,4 @@ def start():
         utils.progress(page_number / response["pages"] * 100)
 
     # Save all data in a file.
-    utils.save_data("guardian", all_data)
+    utils.save_data("theGuardian", all_data)
