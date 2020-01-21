@@ -1,4 +1,9 @@
+import os
+
 import src.utils as utils
+
+website_url = "https://www.thesun.co.uk/news/brexit/page/"
+number_of_pages = 88
 
 
 def get_body_content(body):
@@ -15,8 +20,10 @@ def get_body_content(body):
 def start():
     articles = []
 
-    for page_number in range(1, 89):
-        main_page = utils.scrape_page("https://www.thesun.co.uk/news/brexit/page/" + str(page_number))
+    utils.progress(0)
+
+    for page_number in range(1, number_of_pages + 1):
+        main_page = utils.scrape_page(website_url + str(page_number))
 
         article_anchors = main_page.select(".teaser-item a.teaser-anchor")
 
@@ -25,8 +32,7 @@ def start():
 
             article_page = utils.scrape_page(article_url)
 
-            print(article_url)
-            article_title = article_page.select_one("h1.article__headline").string
+            article_title = article_page.select_one("h1.article__headline").get_text()
             article_body = get_body_content(article_page.select_one(".article__content"))
 
             article_date = article_page.select_one(".article__datestamp").string
@@ -39,6 +45,7 @@ def start():
                 "date": article_date
             })
 
-        utils.progress(page_number / 88 * 100)
+        utils.progress(page_number / number_of_pages * 100)
 
-    utils.save_data("the_sun", articles)
+    # Save all articles in a file.
+    utils.save_data(os.path.splitext(os.path.basename(__file__))[0], articles)

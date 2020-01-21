@@ -1,16 +1,18 @@
-from os import environ
+import os
 
 import requests
 
 import src.utils as utils
 
+api_endpoint = "http://content.guardianapis.com/search"
+api_key = os.environ["GUARDIAN_API_KEY"]
+
 
 def start():
-    api_endpoint = "http://content.guardianapis.com/search"
-    api_key = environ["GUARDIAN_API_KEY"]
-
-    all_data = []
+    articles = []
     page_number = 1
+
+    utils.progress(0)
 
     while True:
         # Get the request response passing all API parameters.
@@ -25,7 +27,7 @@ def start():
         }).json()["response"]
 
         # Map from request response to standard data JSON structure.
-        all_data = all_data + list(map(lambda d: {
+        articles = articles + list(map(lambda d: {
             "title": d["webTitle"],
             "url": d["webUrl"],
             "date": d["webPublicationDate"],
@@ -39,5 +41,5 @@ def start():
 
         utils.progress(page_number / response["pages"] * 100)
 
-    # Save all data in a file.
-    utils.save_data("theGuardian", all_data)
+    # Save all articles in a file.
+    utils.save_data(os.path.splitext(os.path.basename(__file__))[0], articles)
