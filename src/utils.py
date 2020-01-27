@@ -2,9 +2,9 @@ import json
 import sys
 from urllib.request import urlopen as uReq, Request
 
+import dateutil.parser as dp
 from bs4 import BeautifulSoup
 
-import dateutil.parser as dp
 
 def scrape_page(url):
     req = Request(url, headers = {'User-Agent': 'Chrome/79.0.3945.117'}) #To see avaiable User-Agent, go to http://httpbin.org/get
