@@ -10,7 +10,7 @@ def scrape_page(url):
 
 
 def save_data(file_name, data):
-    with open("../data/" + file_name + ".json", 'w') as fp:
+    with open("./data/" + file_name + ".json", 'w') as fp:
         for entry in data:
             json.dump(entry, fp)
             fp.write('\n')
