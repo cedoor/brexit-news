@@ -28,18 +28,24 @@ def start():
         for j, article_anchor in enumerate(article_anchors):
             article_url = article_anchor.get('href')
 
+            if utils.is_404(article_url):
+                continue
             article_page = utils.scrape_page(article_url)
 
             article_title = article_page.select_one("h1.section-theme-background-indicator").get_text()
             article_body = get_body_content(article_page.select_one(".article-body"))
-
-            article_date = article_page.select_one(".date-published")["datetime"]
+            
+            if article_page.select_one(".date-published") is not None:
+                article_date = article_page.select_one(".date-published")["datetime"]
+            else:
+                article_date = article_page.select_one(".date-updated").string
+            article_timestamp = utils.datetime_to_timestamp(article_date)
 
             articles.append({
                 "title": article_title,
-                "content": article_body,
                 "url": article_url,
-                "date": article_date
+                "timestamp": article_timestamp,
+                "content": article_body
             })
 
         utils.progress(page_number / number_of_pages * 100)

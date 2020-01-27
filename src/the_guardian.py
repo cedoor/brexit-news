@@ -30,7 +30,7 @@ def start():
         articles = articles + list(map(lambda d: {
             "title": d["webTitle"],
             "url": d["webUrl"],
-            "date": d["webPublicationDate"],
+            "timestamp": utils.datetime_to_timestamp(d["webPublicationDate"]),
             "content": d["fields"]["bodyText"]
         }, response["results"]))
 

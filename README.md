@@ -34,6 +34,12 @@ pip install -r requirements.txt
 
 TODO
 
+Inside the main directory:
+
+```bash
+python3 -m src.start
+```
+
 ## :chart_with_upwards_trend: Development
 
 ### :scroll: Rules
