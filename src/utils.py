@@ -1,13 +1,15 @@
 import json
 import sys
-from urllib.request import urlopen
+from urllib.request import urlopen as uReq, Request
 
 from bs4 import BeautifulSoup
 
 import dateutil.parser as dp
 
 def scrape_page(url):
-    return BeautifulSoup(urlopen(url).read(), features="html.parser")
+    req = Request(url, headers = {'User-Agent': 'Chrome/79.0.3945.117'}) #To see avaiable User-Agent, go to http://httpbin.org/get
+    page = uReq(req)
+    return BeautifulSoup(page, features="html.parser")
 
 
 def datetime_to_timestamp(datetime):
