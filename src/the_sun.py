@@ -37,12 +37,13 @@ def start():
 
             article_date = article_page.select_one(".article__datestamp").string
             article_date += article_page.select_one(".article__timestamp").string
+            article_timestamp = utils.datetime_to_timestamp(article_date)
 
             articles.append({
                 "title": article_title,
-                "content": article_body,
                 "url": article_url,
-                "date": article_date
+                "timestamp": article_timestamp,
+                "content": article_body
             })
 
         utils.progress(page_number / number_of_pages * 100)

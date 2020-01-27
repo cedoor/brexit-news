@@ -32,14 +32,15 @@ def start():
 
             article_title = article_page.select_one("h1.section-theme-background-indicator").get_text()
             article_body = get_body_content(article_page.select_one(".article-body"))
-
+            
             article_date = article_page.select_one(".date-published")["datetime"]
+            article_timestamp = utils.datetime_to_timestamp(article_date)
 
             articles.append({
                 "title": article_title,
-                "content": article_body,
                 "url": article_url,
-                "date": article_date
+                "timestamp": article_timestamp,
+                "content": article_body
             })
 
         utils.progress(page_number / number_of_pages * 100)
