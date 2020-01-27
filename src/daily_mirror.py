@@ -33,7 +33,10 @@ def start():
             article_title = article_page.select_one("h1.section-theme-background-indicator").get_text()
             article_body = get_body_content(article_page.select_one(".article-body"))
 
-            article_date = article_page.select_one(".date-published")["datetime"] 
+            if article_page.select_one(".date-published") is not None:
+                article_date = article_page.select_one(".date-published")["datetime"]
+            else:
+                article_date = article_page.select_one(".date-updated").string 
             article_timestamp = utils.datetime_to_timestamp(article_date)
 
             articles.append({
