@@ -35,7 +35,7 @@ def start():
             article_title = article_page.select_one("h1.article__headline").get_text()
             article_body = get_body_content(article_page.select_one(".article__content"))
 
-            article_date = article_page.select_one(".article__datestamp").string
+            article_date = article_page.select_one(".article__published span").string
             article_date += article_page.select_one(".article__timestamp").string
             article_timestamp = utils.datetime_to_timestamp(article_date)
 
