@@ -12,6 +12,16 @@ def scrape_page(url):
     return BeautifulSoup(page, features="html.parser")
 
 
+def is_404(url):
+    req = Request(url, headers = {'User-Agent': 'Chrome/79.0.3945.117'}) #To see avaiable User-Agent, go to http://httpbin.org/get
+    try:
+        page = uReq(req)
+    except:
+        return True
+    
+    return False
+
+
 def datetime_to_timestamp(datetime):
     return int(dp.parse(datetime).timestamp())
 

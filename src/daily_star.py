@@ -28,6 +28,8 @@ def start():
         for j, article_anchor in enumerate(article_anchors):
             article_url = article_anchor.get('href')
 
+            if utils.is_404(article_url):
+                continue
             article_page = utils.scrape_page(article_url)
 
             article_title = article_page.select_one("h1.section-theme-background-indicator").get_text()
