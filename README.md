@@ -32,8 +32,6 @@ pip install -r requirements.txt
 
 ## :video_game: Usage
 
-TODO
-
 Inside the main directory:
 
 ```bash
