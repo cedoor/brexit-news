@@ -5,12 +5,15 @@ import requests
 import src.utils as utils
 
 api_endpoint = "http://content.guardianapis.com/search"
-api_key = os.environ["GUARDIAN_API_KEY"]
 
 
 def start():
     articles = []
     page_number = 1
+
+    api_key = input("Insert a valid Guardian API key (https://open-platform.theguardian.com/access/): ")
+
+    print()
 
     utils.progress(0)
 

@@ -30,11 +30,12 @@ def start():
 
             if utils.is_404(article_url):
                 continue
+
             article_page = utils.scrape_page(article_url)
 
             article_title = article_page.select_one("h1.section-theme-background-indicator").get_text()
             article_body = get_body_content(article_page.select_one(".article-body"))
-            
+
             if article_page.select_one(".date-published") is not None:
                 article_date = article_page.select_one(".date-published")["datetime"]
             else:

@@ -30,6 +30,7 @@ def start():
 
             if utils.is_404(article_url):
                 continue
+
             article_page = utils.scrape_page(article_url)
 
             if article_page.select_one("h1.section-theme-background-indicator") is None:  # not a news
@@ -41,6 +42,7 @@ def start():
             # https://www.mirror.co.uk/gallery/brexit-march-london-11-best-14177534.
             if article_page.select_one(".article-body") is None:
                 continue
+
             article_body = get_body_content(article_page.select_one(".article-body"))
 
             if article_page.select_one(".date-published") is not None:
