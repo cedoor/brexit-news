@@ -1,14 +1,15 @@
 import os
-
+import json
 import requests
 
 import src.utils as utils
 
-api_endpoint = "http://content.guardianapis.com/search"
+api_endpoint = "https://content.guardianapis.com/search"
 
 
 def start():
-    articles = []
+    file_name = os.path.splitext(os.path.basename(__file__))[0]
+    articles = utils.open_data(file_name)
     page_number = 1
 
     api_key = input("Insert a valid Guardian API key (https://open-platform.theguardian.com/access/): ")
@@ -29,13 +30,23 @@ def start():
             "api-key": api_key
         }).json()["response"]
 
+
         # Map from request response to standard data JSON structure.
-        articles = articles + list(map(lambda d: {
+        temp_articles = list(map(lambda d: {
             "title": d["webTitle"],
             "url": d["webUrl"],
             "timestamp": utils.datetime_to_timestamp(d["webPublicationDate"]),
             "content": d["fields"]["bodyText"]
         }, response["results"]))
+
+
+        # Remove unuseful or broken articles
+        for article in temp_articles[:]: # note the [:] creates a slice
+            if utils.article_exist(articles, article["url"]):
+                temp_articles.remove(article)
+            elif not article["title"] or not article["url"] or not article["timestamp"] or not article["content"]:
+                temp_articles.remove(article)
+
 
         if page_number == response["pages"]:
             break
@@ -44,5 +55,12 @@ def start():
 
         utils.progress(page_number / response["pages"] * 100)
 
-    # Save all articles in a file.
-    utils.save_data(os.path.splitext(os.path.basename(__file__))[0], articles)
+        if not temp_articles:
+            continue
+        else:
+            articles += temp_articles
+
+            # Save articles in a file.
+            utils.save_data(file_name, articles)
+    
+    utils.summary(file_name, articles)

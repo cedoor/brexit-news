@@ -16,7 +16,8 @@ def get_body_content(body):
 
 
 def start():
-    articles = []
+    file_name = os.path.splitext(os.path.basename(__file__))[0]
+    articles = utils.open_data(file_name)
 
     utils.progress(0)
 
@@ -28,12 +29,18 @@ def start():
         for j, article_anchor in enumerate(article_anchors):
             article_url = article_anchor.get('href')
 
-            if utils.is_404(article_url):
+            if utils.article_exist(articles, article_url) or utils.is_404(article_url):
                 continue
 
             article_page = utils.scrape_page(article_url)
 
             article_title = article_page.select_one("h1.section-theme-background-indicator").get_text()
+            
+            # In this case is not an useful article, like
+            # https://www.dailystar.co.uk/news/latest-news/eu-referendum-live-blog-vote-17096947
+            if article_page.select_one(".article-body") is None:
+                continue
+            
             article_body = get_body_content(article_page.select_one(".article-body"))
 
             if article_page.select_one(".date-published") is not None:
@@ -49,7 +56,9 @@ def start():
                 "content": article_body
             })
 
+            # Save articles in a file.
+            utils.save_data(file_name, articles)
+        
         utils.progress(page_number / number_of_pages * 100)
 
-    # Save all articles in a file.
-    utils.save_data(os.path.splitext(os.path.basename(__file__))[0], articles)
+    utils.summary(file_name, articles)
