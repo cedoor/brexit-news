@@ -21,6 +21,7 @@ def start():
     file_name = os.path.splitext(os.path.basename(__file__))[0]
     articles = utils.open_data(file_name)
 
+    print()
     utils.progress(0)
 
     for page_number in range(1, number_of_pages + 1):
