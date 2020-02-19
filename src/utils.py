@@ -1,6 +1,6 @@
 import json
 import sys
-from os import path
+from os import path, makedirs
 from urllib.error import URLError
 from urllib.request import urlopen, Request
 
@@ -13,6 +13,30 @@ def scrape_page(url):
     request = Request(url, headers={"User-Agent": "Chrome/79.0.3945.117"})
 
     return BeautifulSoup(urlopen(request), features="html.parser")
+
+
+def get_api_key(file_name, url_api_access):
+    api_keys_path = "./.api_keys"
+    file_path = "%s/.%s" % (api_keys_path, file_name)
+
+    if path.exists(file_path):
+        file = open(file_path, "r")
+        print("Using stored API for %s" % (file_name))
+        print()
+        return file.read()
+    
+    api_key = input("Insert a valid API key for %s (%s): " % (file_name, url_api_access))
+    print()
+    
+    if not path.exists(api_keys_path):
+        makedirs(api_keys_path)
+   
+    file = open(file_path, "w+")
+    file.write(api_key)
+    
+    print("API key for %s stored" % (file_name))
+    print()
+    return api_key
 
 
 def is_404(url):
@@ -58,7 +82,7 @@ def open_data(file_name):
             articles.remove(article)
 
 
-    print("Updating data/%s.json file...\n" % (file_name))
+    print("Updating data/%s.json file..." % (file_name))
     return articles
 
 

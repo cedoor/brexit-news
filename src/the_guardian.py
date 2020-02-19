@@ -4,18 +4,18 @@ import requests
 
 import src.utils as utils
 
+url_api_access = "https://open-platform.theguardian.com/access/"
+
 api_endpoint = "https://content.guardianapis.com/search"
 
 
 def start():
     file_name = os.path.splitext(os.path.basename(__file__))[0]
+    api_key = utils.get_api_key(file_name, url_api_access)
     articles = utils.open_data(file_name)
     page_number = 1
 
-    api_key = input("Insert a valid Guardian API key (https://open-platform.theguardian.com/access/): ")
-
     print()
-
     utils.progress(0)
 
     while True:
