@@ -66,6 +66,27 @@ def datetime_to_timestamp(datetime):
     return int(date_parser.parse(datetime).timestamp())
 
 
+def fix_json(file_path):
+    file = open(file_path, mode='r')
+    broken_json = file.read()
+    file.close()
+
+    brackets = []
+    for i, c in enumerate(broken_json):
+        if c == '{':
+            brackets.append(i)
+        elif c == '}':
+            brackets.pop()
+
+    if brackets:
+        broken_json = broken_json[:brackets[0]].rstrip(', \n')
+
+    if not broken_json.endswith(']'):
+        broken_json += ']'
+
+    return json.loads(broken_json)
+
+
 def open_data(file_name):
     file_path = data_path(file_name)
 
@@ -73,8 +94,15 @@ def open_data(file_name):
         print("Creating data/%s.json file...\n" % (file_name))
         return []
 
-    with open(file_path, "r") as fp:
-        articles = json.load(fp)
+    try:
+        with open(file_path, "r") as fp:
+            articles = json.load(fp)
+    except json.decoder.JSONDecodeError:
+        print("%s.json is broken, probably due an unexpected crash. Trying to restore it...." % (file_name))
+        print()
+
+        articles = fix_json(file_path)
+
     
     # Remove unuseful or broken articles
     for article in articles:
