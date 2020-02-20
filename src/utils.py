@@ -112,9 +112,10 @@ def open_data(file_name):
 
     
     # Remove unuseful or broken articles
-    for article in articles:
+    for article in articles[:]: # note the [:] creates a slice
         if not article["title"] or not article["url"] or not article["timestamp"] or not article["content"]:
             articles.remove(article)
+            save_data(file_name, articles)
 
 
     print("Updating data/%s.json file..." % (file_name))
