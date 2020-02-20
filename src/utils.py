@@ -98,7 +98,7 @@ def open_data(file_name):
     file_path = data_path(file_name)
 
     if not path.exists(file_path):
-        print("Creating data/%s.json file...\n" % (file_name))
+        print("Creating data/%s.json file..." % (file_name))
         return []
 
     try:
