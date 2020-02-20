@@ -1,4 +1,5 @@
 import os
+import sys
 import json
 import requests
 
@@ -7,6 +8,17 @@ import src.utils as utils
 url_api_access = "https://open-platform.theguardian.com/access/"
 
 api_endpoint = "https://content.guardianapis.com/search"
+
+def request_articles(page_number, api_key):
+    return requests.get(api_endpoint, {
+                "tag": "politics/eu-referendum",
+                "section": "politics",
+                "order-by": "newest",
+                "show-fields": "trailText,bodyText,wordcount,publication",
+                "page-size": 200,
+                "page": page_number,
+                "api-key": api_key
+            }).json()["response"]
 
 
 def start():
@@ -19,16 +31,17 @@ def start():
     utils.progress(0)
 
     while True:
-        # Get the request response passing all API parameters.
-        response = requests.get(api_endpoint, {
-            "tag": "politics/eu-referendum",
-            "section": "politics",
-            "order-by": "newest",
-            "show-fields": "trailText,bodyText,wordcount,publication",
-            "page-size": 200,
-            "page": page_number,
-            "api-key": api_key
-        }).json()["response"]
+        try:
+            # Get the request response passing all API parameters.
+            response = request_articles(page_number, api_key)
+        except KeyError:
+            sys.stdout.write("\rSeems like your API key for %s is invalid" % (file_name))
+            print("\nStored API key: %s" % (api_key))
+
+            api_key = utils.set_api_key(file_name, url_api_access)
+
+            # Get the request response passing all API parameters.
+            response = request_articles(page_number, api_key)
 
 
         # Map from request response to standard data JSON structure.

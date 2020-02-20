@@ -15,15 +15,9 @@ def scrape_page(url):
     return BeautifulSoup(urlopen(request), features="html.parser")
 
 
-def get_api_key(file_name, url_api_access):
+def set_api_key(file_name, url_api_access):
     api_keys_path = "./.api_keys"
     file_path = "%s/.%s" % (api_keys_path, file_name)
-
-    if path.exists(file_path):
-        file = open(file_path, "r")
-        print("Using stored API for %s" % (file_name))
-        print()
-        return file.read()
     
     api_key = input("Insert a valid API key for %s (%s): " % (file_name, url_api_access))
     print()
@@ -37,6 +31,19 @@ def get_api_key(file_name, url_api_access):
     print("API key for %s stored" % (file_name))
     print()
     return api_key
+
+
+def get_api_key(file_name, url_api_access):
+    api_keys_path = "./.api_keys"
+    file_path = "%s/.%s" % (api_keys_path, file_name)
+
+    if path.exists(file_path):
+        file = open(file_path, "r")
+        print("Using stored API for %s" % (file_name))
+        print()
+        return file.read()
+    
+    return set_api_key(file_name, url_api_access)
 
 
 def is_404(url):
