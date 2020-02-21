@@ -133,3 +133,6 @@ dmypy.json
 
 # Scraped data
 data/*.json
+
+# API keys
+.api_keys/.*
