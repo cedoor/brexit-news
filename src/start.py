@@ -13,12 +13,9 @@ max_attempts = 3
 
 
 def run_all():
-    daily_mirror.start()
-    daily_star.start()
-    indipendent.start()
-    the_guardian.start()
-    the_sun.start()
-    the_telegraph.start()
+    for i in range(6):
+        error_handler(str(i))
+        print("\n\n")
 
 
 def get_error_info(error):
@@ -35,8 +32,7 @@ def error_handler(newspaper):
                 "2": indipendent.start,
                 "3": the_guardian.start,
                 "4": the_sun.start,
-                "5": the_telegraph.start,
-                "9": run_all
+                "5": the_telegraph.start
             }[newspaper]()
             break
 
@@ -77,4 +73,7 @@ newspaper = input("""
 Choose the newspaper to scrape: """)
 
 print()
-error_handler(newspaper)
+if newspaper == str(9):
+    run_all()
+else:
+    error_handler(newspaper)
