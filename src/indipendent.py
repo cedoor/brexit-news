@@ -7,8 +7,17 @@ website_url = "https://www.independent.co.uk"
 archive_url = website_url + "/archive/"
         
 
-def get_body_content(body):
+def get_body_content(article_page, article_url):
     content = ""
+
+    if article_page.select_one(".body-content") is not None:
+        body = article_page.select_one(".body-content")
+    elif article_page.select_one(".text-wrapper") is not None:
+        body = article_page.select_one(".text-wrapper")
+    elif article_page.select_one(".m-detail--body") is not None:
+        body = article_page.select_one(".m-detail--body")
+    else:   # content not found
+        return content
 
     for paragraph in body.select("p"):
         content += "\n" + paragraph.get_text()
@@ -19,14 +28,14 @@ def get_body_content(body):
 def start():
     file_name = os.path.splitext(os.path.basename(__file__))[0]
     articles = utils.open_data(file_name)
-    
-    print()
-    utils.progress(0)
 
     start_date = date(2016, 1, 1)
     end_date = date.today()
 
     delta = end_date - start_date       # as timedelta
+
+    print()
+    utils.progress_bar(0, delta.days + 1)
 
     for i in range(delta.days + 1):
         day = start_date + timedelta(days=i)
@@ -49,10 +58,16 @@ def start():
 
             article_page = utils.scrape_page(article_url)
 
-            article_date = article_page.select_one("amp-timeago").get("datetime")
+            if article_page.select_one("amp-timeago") is not None:
+                article_date = article_page.select_one("amp-timeago").get("datetime")
+            elif article_page.select_one("time") is not None:
+                article_date = article_page.select_one("time").get("datetime")
+            else:
+                continue
+            
             article_timestamp = utils.datetime_to_timestamp(article_date)
 
-            article_body = get_body_content(article_page.select_one(".body-content"))
+            article_body = get_body_content(article_page, article_url)
             if not article_body:
                 continue
                 
@@ -66,6 +81,6 @@ def start():
             # Save articles in a file.
             utils.save_data(file_name, articles)
 
-        utils.progress(i / (delta.days + 1) * 100)
+        utils.progress_bar(i, delta.days + 1)
 
     utils.summary(file_name, articles)

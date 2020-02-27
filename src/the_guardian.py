@@ -28,7 +28,7 @@ def start():
     page_number = 1
 
     print()
-    utils.progress(0)
+    utils.progress_bar(0, 100)
 
     while True:
         try:
@@ -66,7 +66,7 @@ def start():
 
         page_number += 1
 
-        utils.progress(page_number / response["pages"] * 100)
+        utils.progress_bar(page_number, response["pages"])
 
         if not temp_articles:
             continue
