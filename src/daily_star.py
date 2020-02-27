@@ -20,7 +20,7 @@ def start():
     articles = utils.open_data(file_name)
 
     print()
-    utils.progress(0)
+    utils.progress_bar(0, number_of_pages)
 
     for page_number in range(1, number_of_pages + 1):
         main_page = utils.scrape_page(website_url + str(page_number))
@@ -63,6 +63,6 @@ def start():
             # Save articles in a file.
             utils.save_data(file_name, articles)
         
-        utils.progress(page_number / number_of_pages * 100)
+        utils.progress_bar(page_number, number_of_pages)
 
     utils.summary(file_name, articles)

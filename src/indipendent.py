@@ -28,14 +28,14 @@ def get_body_content(article_page, article_url):
 def start():
     file_name = os.path.splitext(os.path.basename(__file__))[0]
     articles = utils.open_data(file_name)
-    
-    print()
-    utils.progress(0)
 
     start_date = date(2016, 1, 1)
     end_date = date.today()
 
     delta = end_date - start_date       # as timedelta
+
+    print()
+    utils.progress_bar(0, delta.days + 1)
 
     for i in range(delta.days + 1):
         day = start_date + timedelta(days=i)
@@ -81,6 +81,6 @@ def start():
             # Save articles in a file.
             utils.save_data(file_name, articles)
 
-        utils.progress(i / (delta.days + 1) * 100)
+        utils.progress_bar(i, delta.days + 1)
 
     utils.summary(file_name, articles)

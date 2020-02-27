@@ -133,6 +133,12 @@ def summary(file_name, data):
     print("\n\n✔ %d articles saved in data/%s.json file!" % (len(data), file_name))
 
 
-def progress(i):
-    sys.stdout.write("\r%d%%" % i)
+def progress_bar(count, total):
+    bar_len = 60
+    filled_len = int(round(bar_len * count / float(total)))
+
+    percents = round(100.0 * count / float(total), 1)
+    bar = '=' * filled_len + ' ' * (bar_len - filled_len)
+
+    sys.stdout.write('[%s] %s%s\r' % (bar, percents, '%'))
     sys.stdout.flush()
