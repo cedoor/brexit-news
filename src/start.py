@@ -13,12 +13,12 @@ max_attempts = 3
 
 
 def run_all():
+    daily_mirror.start()
+    daily_star.start()
+    indipendent.start()
     the_guardian.start()
     the_sun.start()
-    daily_star.start()
     the_telegraph.start()
-    daily_mirror.start()
-    indipendent.start()
 
 
 def get_error_info(error):
