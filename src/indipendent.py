@@ -7,8 +7,17 @@ website_url = "https://www.independent.co.uk"
 archive_url = website_url + "/archive/"
         
 
-def get_body_content(body):
+def get_body_content(article_page, article_url):
     content = ""
+
+    if article_page.select_one(".body-content") is not None:
+        body = article_page.select_one(".body-content")
+    elif article_page.select_one(".text-wrapper") is not None:
+        body = article_page.select_one(".text-wrapper")
+    elif article_page.select_one(".m-detail--body") is not None:
+        body = article_page.select_one(".m-detail--body")
+    else:   # content not found
+        return content
 
     for paragraph in body.select("p"):
         content += "\n" + paragraph.get_text()
@@ -49,10 +58,16 @@ def start():
 
             article_page = utils.scrape_page(article_url)
 
-            article_date = article_page.select_one("amp-timeago").get("datetime")
+            if article_page.select_one("amp-timeago") is not None:
+                article_date = article_page.select_one("amp-timeago").get("datetime")
+            elif article_page.select_one("time") is not None:
+                article_date = article_page.select_one("time").get("datetime")
+            else:
+                continue
+            
             article_timestamp = utils.datetime_to_timestamp(article_date)
 
-            article_body = get_body_content(article_page.select_one(".body-content"))
+            article_body = get_body_content(article_page, article_url)
             if not article_body:
                 continue
                 
