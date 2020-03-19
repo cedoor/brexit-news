@@ -1,6 +1,7 @@
 # Brexit news
 
 Simple script to download articles from the main newspapers on Brexit.
+
 The analyzed newspapers are:
 - Daily Mirror
 - Daily Star
