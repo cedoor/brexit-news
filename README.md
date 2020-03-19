@@ -10,7 +10,8 @@ The analyzed newspapers are:
 - The Telegraph
 
 The program has basic error handling.
-All articles from different newspapers are obtained by scraping except The Guardian, which has its public [API](https://open-platform.theguardian.com/access/).
+All articles from different newspapers are obtained by scraping. It means that parts of the code could give errors if the sites are modified. 
+The Guardian is an exception because it has its public [API](https://open-platform.theguardian.com/access/).
 
 ___
 
