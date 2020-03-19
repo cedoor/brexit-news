@@ -1,6 +1,16 @@
 # Brexit news
 
 Simple script to download articles from the main newspapers on Brexit.
+The analyzed newspapers are:
+- Daily Mirror
+- Daily Star
+- Indipendent
+- The Guardian
+- The Sun
+- The Telegraph
+
+The program has basic error handling.
+All articles from different newspapers are obtained by scraping except The Guardian, which has its public [API](https://open-platform.theguardian.com/access/).
 
 ___
 
@@ -17,10 +27,10 @@ ___
 
 ## :hammer: Install
 
-With the following installed:
+With the following packages installed:
 - git
-- python3.7
-- pip
+- python 3
+- pip 3
 
 Clone the repo and install the dependencies from npm.
 
