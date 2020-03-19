@@ -18,16 +18,16 @@ def scrape_page(url):
 def set_api_key(file_name, url_api_access):
     api_keys_path = "./.api_keys"
     file_path = "%s/.%s" % (api_keys_path, file_name)
-    
+
     api_key = input("Insert a valid API key for %s (%s): " % (file_name, url_api_access))
     print()
-    
+
     if not path.exists(api_keys_path):
         makedirs(api_keys_path)
-   
+
     file = open(file_path, "w+")
     file.write(api_key)
-    
+
     print("API key for %s stored" % (file_name))
     print()
     return api_key
@@ -42,7 +42,7 @@ def get_api_key(file_name, url_api_access):
         print("Using stored API for %s" % (file_name))
         print()
         return file.read()
-    
+
     return set_api_key(file_name, url_api_access)
 
 
@@ -65,7 +65,7 @@ def article_exist(articles, url):
     for article in articles:
         if article["url"] == url:
             return True
-        
+
     return False
 
 
@@ -110,13 +110,11 @@ def open_data(file_name):
 
         articles = fix_json(file_path)
 
-    
     # Remove unuseful or broken articles
-    for article in articles[:]: # note the [:] creates a slice
+    for article in articles[:]:  # note the [:] creates a slice
         if not article["title"] or not article["url"] or not article["timestamp"] or not article["content"]:
             articles.remove(article)
             save_data(file_name, articles)
-
 
     print("Updating data/%s.json file..." % (file_name))
     return articles

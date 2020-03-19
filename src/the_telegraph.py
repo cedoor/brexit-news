@@ -41,7 +41,7 @@ def start():
                 article_title = article_page.select_one("h1.headline__heading").get_text()
             elif article_page.select_one("h1.e-headline") is not None:
                 article_title = article_page.select_one("h1.e-headline").get_text()
-            else:   # In this case is not a conventional article, like https://www.telegraph.co.uk/politics/2019/12/12/general-election-polls-tracker-latest-uk-odds-2019-opinion-poll/
+            else:  # In this case is not a conventional article, like https://www.telegraph.co.uk/politics/2019/12/12/general-election-polls-tracker-latest-uk-odds-2019-opinion-poll/
                 continue
 
             # In this case is not an useful article
@@ -54,7 +54,7 @@ def start():
                 article_date = article_page.select_one(".article-date time")["datetime"]
             elif article_page.select_one(".article__byline-date time") is not None:
                 article_date = article_page.select_one(".article__byline-date time")["datetime"]
-            else:   # In this case is not a conventional article, like https://www.telegraph.co.uk/politics/2019/12/12/will-election-results-declared-area-timetable-night/
+            else:  # In this case is not a conventional article, like https://www.telegraph.co.uk/politics/2019/12/12/will-election-results-declared-area-timetable-night/
                 continue
 
             article_timestamp = utils.datetime_to_timestamp(article_date)
@@ -71,7 +71,7 @@ def start():
 
             # Save articles in a file.
             utils.save_data(file_name, articles)
-        
+
         utils.progress_bar(page_number, number_of_pages)
 
     utils.summary(file_name, articles)

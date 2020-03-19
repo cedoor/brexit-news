@@ -8,7 +8,6 @@ import src.the_guardian as the_guardian
 import src.the_sun as the_sun
 import src.the_telegraph as the_telegraph
 
-
 max_attempts = 3
 
 
@@ -36,7 +35,7 @@ def error_handler(newspaper):
             }[newspaper]()
             break
 
-        except: # catch *all* exceptions
+        except:  # catch *all* exceptions
             error = sys.exc_info()
 
             if attempt >= max_attempts:
@@ -45,7 +44,7 @@ def error_handler(newspaper):
                 print("Last error:")
                 get_error_info(error)
                 break
-            
+
             print("\n\nAn error occurred:")
             get_error_info(error)
             print()
@@ -55,7 +54,7 @@ def error_handler(newspaper):
                 sys.stdout.write("\rRestarting function in %s sec\033[K" % (seconds))
                 time.sleep(1)
                 seconds -= 1
-            
+
             print("\n\n")
 
 

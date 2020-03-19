@@ -36,12 +36,12 @@ def start():
             article_page = utils.scrape_page(article_url)
 
             article_title = article_page.select_one("h1.section-theme-background-indicator").get_text()
-            
+
             # In this case is not an useful article, like
             # https://www.dailystar.co.uk/news/latest-news/eu-referendum-live-blog-vote-17096947
             if article_page.select_one(".article-body") is None:
                 continue
-            
+
             article_body = get_body_content(article_page.select_one(".article-body"))
 
             if article_page.select_one(".date-published") is not None:
@@ -62,7 +62,7 @@ def start():
 
             # Save articles in a file.
             utils.save_data(file_name, articles)
-        
+
         utils.progress_bar(page_number, number_of_pages)
 
     utils.summary(file_name, articles)

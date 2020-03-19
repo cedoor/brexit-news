@@ -43,10 +43,10 @@ def start():
             article_date = article_page.select_one(".article__published span").string
             article_date += article_page.select_one(".article__timestamp").string
             article_timestamp = utils.datetime_to_timestamp(article_date)
-            
+
             if not article_body:
                 continue
-            
+
             articles.append({
                 "title": article_title,
                 "url": article_url,
