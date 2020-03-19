@@ -5,7 +5,7 @@ import src.utils as utils
 
 website_url = "https://www.independent.co.uk"
 archive_url = website_url + "/archive/"
-        
+
 
 def get_body_content(article_page, article_url):
     content = ""
@@ -16,12 +16,12 @@ def get_body_content(article_page, article_url):
         body = article_page.select_one(".text-wrapper")
     elif article_page.select_one(".m-detail--body") is not None:
         body = article_page.select_one(".m-detail--body")
-    else:   # content not found
+    else:  # content not found
         return content
 
     for paragraph in body.select("p"):
         content += "\n" + paragraph.get_text()
-    
+
     return content
 
 
@@ -32,7 +32,7 @@ def start():
     start_date = date(2016, 1, 1)
     end_date = date.today()
 
-    delta = end_date - start_date       # as timedelta
+    delta = end_date - start_date  # as timedelta
 
     print()
     utils.progress_bar(0, delta.days + 1)
@@ -52,7 +52,7 @@ def start():
 
             if "brexit" not in article_title.lower():
                 continue
-            
+
             if utils.article_exist(articles, article_url) or utils.is_404(article_url):
                 continue
 
@@ -64,13 +64,13 @@ def start():
                 article_date = article_page.select_one("time").get("datetime")
             else:
                 continue
-            
+
             article_timestamp = utils.datetime_to_timestamp(article_date)
 
             article_body = get_body_content(article_page, article_url)
             if not article_body:
                 continue
-                
+
             articles.append({
                 "title": article_title,
                 "url": article_url,

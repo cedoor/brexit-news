@@ -62,7 +62,7 @@ def start():
                 "timestamp": article_timestamp,
                 "content": article_body
             })
-            
+
             # Save articles in a file.
             utils.save_data(file_name, articles)
 
