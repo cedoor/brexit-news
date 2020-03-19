@@ -1,6 +1,6 @@
 import os
 import sys
-import json
+
 import requests
 
 import src.utils as utils
